@@ -84,7 +84,7 @@ func _update_tile_info() -> void:
 		if tile_map.has_method("get_terrain_name"):
 			terrain_name = tile_map.get_terrain_name(terrain_id)
 		elif terrain_id >= 0:
-			terrain_name = _default_terrain_names()[terrain_id] if terrain_id >= 0 and terrain_id < _default_terrain_names().size() else "—"
+			terrain_name = "地形 %d" % terrain_id
 		if tile_map.has_method("get_height_meters_at_cell"):
 			var h_m: float = tile_map.get_height_meters_at_cell(cell)
 			height_str = "%d m" % int(snappedf(h_m, 1.0))
@@ -97,7 +97,3 @@ func _update_tile_info() -> void:
 			terrain_name = "格子 %d" % sid
 
 	tile_info_label.text = "格子: %d, %d\n地形: %s\n高度: %s" % [cell.x, cell.y, terrain_name, height_str]
-
-
-func _default_terrain_names() -> PackedStringArray:
-	return PackedStringArray(["深海", "海洋", "草原", "沙漠", "温带森林", "热带森林", "雪地"])
