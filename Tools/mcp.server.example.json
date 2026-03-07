@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "godot-epub-docs": {
+      "command": "uv",
+      "args": [
+        "run",
+        "F:/Document/GODOT/cultivation-simulator/Tools/epub_mcp_server.py"
+      ],
+      "env": {
+        "GODOT_EPUB_DOC_DIR": "F:/Document/GODOT/cultivation-simulator/doc",
+        "GODOT_EPUB_INDEX_PATH": "F:/Document/GODOT/cultivation-simulator/Tools/epub_index.db",
+        "UV_PYTHON_PREFERENCE": "only-managed"
+      }
+    }
+  }
+}
