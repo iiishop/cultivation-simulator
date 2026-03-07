@@ -84,7 +84,7 @@ func _update_tile_info() -> void:
 		if tile_map.has_method("get_terrain_name"):
 			terrain_name = tile_map.get_terrain_name(terrain_id)
 		elif terrain_id >= 0:
-			terrain_name = _default_terrain_names()[terrain_id] if terrain_id < 7 else "—"
+			terrain_name = _default_terrain_names()[terrain_id] if terrain_id >= 0 and terrain_id < _default_terrain_names().size() else "—"
 		if tile_map.has_method("get_height_meters_at_cell"):
 			var h_m: float = tile_map.get_height_meters_at_cell(cell)
 			height_str = "%d m" % int(snappedf(h_m, 1.0))
