@@ -84,7 +84,7 @@ func generate_land() -> void:
 	print("[Generator]: 开始生成陆地")
 	var total := _size * _size
 	var i := 0
-	var half := _size / 2  # 整数除法用于格子范围
+	var half := int(_size / 2.0)
 
 	for x in range(-half, half):
 		for y in range(-half, half):
@@ -182,7 +182,7 @@ func generate_river(start_x: int, start_y: int) -> void:
 func generate(size: int) -> void:
 	_size = size
 	generate_land()
-	var half := size / 2  # 整数除法
+	var half := int(size / 2.0)
 	var river_count := randi() % 15 + 5
 	for _i in river_count:
 		var x := randi_range(-half, half - 1)
