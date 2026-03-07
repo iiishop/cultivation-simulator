@@ -24,6 +24,10 @@ const TERRAIN_NAMES := [
 var _size := 512
 const TILE_SIZE := 16
 
+## 高度米制换算：原始高度约 [-1, 1]，海平面 0 → 0 m，1 单位 = 10 km
+## 深海约 -0.5 → -5000 m，雪线 0.4 → 4000 m，极高山约 1 → 10000 m
+const HEIGHT_TO_METERS := 10000.0
+
 func _ready() -> void:
 	if tile_set == null or tile_set.get_source_count() == 0:
 		tile_set = _create_placeholder_tileset()
@@ -78,6 +82,16 @@ func evaluate(x: float) -> float:
 
 func get_heightv(pos: Vector2) -> float:
 	return noise.get_noise_2d(pos.x, pos.y) - falloff_value(pos)
+
+
+## 返回该位置高度（米），海平面为 0
+func get_height_meters(pos: Vector2) -> float:
+	return get_heightv(pos) * HEIGHT_TO_METERS
+
+
+## 返回格子中心高度（米）
+func get_height_meters_at_cell(coords: Vector2i) -> float:
+	return get_heightv(Vector2(coords)) * HEIGHT_TO_METERS
 
 
 func generate_land() -> void:
