@@ -9,6 +9,8 @@ extends CanvasLayer
 @onready var _btn_settings: Button = %BtnSettings
 @onready var _btn_quit: Button = %BtnQuit
 
+var _settings_panel: PopupPanel
+
 const _BG_OVERLAY := Color(0.04, 0.03, 0.06, 0.72)
 const _PANEL_BG := Color(0.09, 0.08, 0.07, 0.96)
 const _PANEL_BORDER := Color(0.55, 0.42, 0.18, 0.9)
@@ -25,6 +27,10 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	hide()
 	_apply_theme()
+	var SettingsPanelScene := preload("res://Scenes/SettingsPanel.tscn") as PackedScene
+	_settings_panel = SettingsPanelScene.instantiate() as PopupPanel
+	add_child(_settings_panel)
+	_settings_panel.hide()
 	if _btn_continue:
 		_btn_continue.pressed.connect(_on_continue_pressed)
 	if _btn_settings:
@@ -86,8 +92,8 @@ func _on_continue_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	# 预留：打开设置界面
-	pass
+	if _settings_panel:
+		_settings_panel.popup_centered()
 
 
 func _on_quit_pressed() -> void:

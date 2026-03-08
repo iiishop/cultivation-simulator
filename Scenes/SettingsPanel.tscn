@@ -1,0 +1,157 @@
+[gd_scene load_steps=2 format=3 uid="uid://settings_panel_001"]
+
+[ext_resource type="Script" path="res://Scripts/settings_panel.gd" id="1_script"]
+
+[node name="SettingsPanel" type="PopupPanel"]
+process_mode = 3
+script = ExtResource("1_script")
+size = Vector2i(520, 420)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "设置"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="通用" type="VBoxContainer" parent="MarginContainer/VBox/TabContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Placeholder" type="Label" parent="MarginContainer/VBox/TabContainer/通用"]
+layout_mode = 2
+text = "（通用设置预留）"
+
+[node name="音量" type="VBoxContainer" parent="MarginContainer/VBox/TabContainer"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 8
+
+[node name="Placeholder" type="Label" parent="MarginContainer/VBox/TabContainer/音量"]
+layout_mode = 2
+text = "（音量设置预留）"
+
+[node name="LLM" type="MarginContainer" parent="MarginContainer/VBox/TabContainer"]
+layout_mode = 2
+visible = false
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="LLMPage" type="VBoxContainer" parent="MarginContainer/VBox/TabContainer/LLM"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ApiSection" type="VBoxContainer" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ApiBaseLabel" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ApiSection"]
+layout_mode = 2
+text = "API 基础地址（Base URL）"
+
+[node name="ApiBase" type="LineEdit" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ApiSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "https://api.openai.com/v1"
+size_flags_vertical = 0
+
+[node name="ApiKeyLabel" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ApiSection"]
+layout_mode = 2
+text = "API Key（密钥）"
+
+[node name="ApiKey" type="LineEdit" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ApiSection"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "sk-..."
+secret = true
+
+[node name="QuickFill" type="HBoxContainer" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/QuickFill"]
+layout_mode = 2
+text = "快速填充："
+
+[node name="BtnDeepSeek" type="Button" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/QuickFill"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DeepSeek"
+
+[node name="BtnOpenAI" type="Button" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/QuickFill"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "OpenAI"
+
+[node name="BtnQwen" type="Button" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/QuickFill"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "千问"
+
+[node name="BtnOllama" type="Button" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/QuickFill"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ollama"
+
+[node name="ValidateRow" type="HBoxContainer" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BtnValidate" type="Button" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ValidateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "验证并获取模型列表"
+
+[node name="ValidateStatus" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ValidateRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = ""
+
+[node name="ModelsSection" type="VBoxContainer" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="FastLabel" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ModelsSection"]
+layout_mode = 2
+text = "快速模型（需快速响应的场景）"
+
+[node name="FastModel" type="OptionButton" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ModelsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SmartLabel" type="Label" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ModelsSection"]
+layout_mode = 2
+text = "智能模型（长思考、深度处理）"
+
+[node name="SmartModel" type="OptionButton" parent="MarginContainer/VBox/TabContainer/LLM/LLMPage/ModelsSection"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BtnBack" type="Button" parent="MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "返回"

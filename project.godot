@@ -8,6 +8,10 @@
 
 config_version=5
 
+[autoload]
+
+LLMConfig="*res://Scripts/llm_config.gd"
+
 [application]
 
 config/name="cultivation-simulator"
