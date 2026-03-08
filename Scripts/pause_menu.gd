@@ -27,7 +27,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_WHEN_PAUSED
 	hide()
 	_apply_theme()
-	var SettingsPanelScene := preload("res://Scenes/SettingsPanel.tscn") as PackedScene
+	var SettingsPanelScene := preload("res://Elements/SettingsPanel.tscn") as PackedScene
 	_settings_panel = SettingsPanelScene.instantiate() as PopupPanel
 	add_child(_settings_panel)
 	_settings_panel.hide()
