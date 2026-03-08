@@ -1,0 +1,20 @@
+---
+description: Require Godot docs verification via local MCP before implementation
+alwaysApply: true
+---
+
+# Godot Docs First (Project Rule)
+
+For any Godot API usage, refactor, bugfix, or new feature in this repository:
+
+1. Treat local documentation as source of truth.
+2. Use the `godot-epub-docs` MCP tools to verify API/class/method/property behavior before coding.
+3. Prefer this lookup sequence:
+   - `suggest_api_for_task` for feature-level discovery
+   - `find_class`, `find_method`, `find_property` for exact symbols
+   - `find_examples` for concrete usage
+   - `search_docs` + `get_chunk` when ambiguity remains
+4. If touching a method call/property and it was not verified in this session, verify it first.
+5. In the final response, briefly state which Godot symbols were verified and any behavior constraints discovered.
+
+If MCP is unavailable, explicitly report that verification could not be completed and avoid claiming API certainty.

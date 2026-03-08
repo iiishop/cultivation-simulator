@@ -6,6 +6,7 @@ extends Node
 @export var camera: Camera2D
 @export var tile_map: TileMapLayer
 @export var tile_info_label: Label
+@export var pause_menu: CanvasLayer
 
 const ZOOM_MIN := 0.25
 const ZOOM_MAX := 3.0
@@ -23,12 +24,21 @@ func _ready() -> void:
 		tile_map = get_parent().get_node_or_null("TerrainMap")
 	if not tile_info_label:
 		tile_info_label = get_parent().get_node_or_null("UI/TileInfo")
+	if not pause_menu:
+		pause_menu = get_parent().get_node_or_null("PauseMenu")
 	if tile_info_label:
 		tile_info_label.text = "—"
 
 
 func _input(event: InputEvent) -> void:
 	if not camera:
+		return
+	# ESC：未暂停时打开暂停菜单（暂停后由菜单自身处理 ESC）
+	if event.is_action_pressed("ui_cancel") and not get_tree().paused:
+		if pause_menu:
+			get_tree().paused = true
+			pause_menu.show()
+			get_viewport().set_input_as_handled()
 		return
 	# 滚轮缩放（以视口中心或鼠标位置为基准）
 	if event is InputEventMouseButton:

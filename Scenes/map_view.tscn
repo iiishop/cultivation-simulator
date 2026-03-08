@@ -1,7 +1,8 @@
-[gd_scene format=3 uid="uid://c2vx8qm4njy1b"]
+[gd_scene load_steps=3 format=3 uid="uid://c2vx8qm4njy1b"]
 
 [ext_resource type="Script" uid="uid://0ufwlxt8wsb6" path="res://Scripts/terrain_generator.gd" id="1"]
 [ext_resource type="Script" uid="uid://cbpu4wxxmbitf" path="res://Scripts/map_camera.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://dpause_menu_001" path="res://Scenes/PauseMenu.tscn" id="3"]
 
 [node name="MapView" type="Node2D" unique_id=1204455326]
 
@@ -13,6 +14,8 @@ zoom = Vector2(0.5, 0.5)
 
 [node name="MapController" type="Node" parent="." unique_id=640548792]
 script = ExtResource("2")
+
+[node name="PauseMenu" type="CanvasLayer" parent="." instance=ExtResource("3")]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1127517855]
 

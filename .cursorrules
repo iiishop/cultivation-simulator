@@ -1,0 +1,7 @@
+Project policy for AI coding in this repository:
+
+- For all Godot-related changes, verify API usage with `godot-epub-docs` MCP first.
+- Use: `find_class`, `find_method`, `find_property`, and `find_examples` before implementation.
+- Use `search_docs`/`get_chunk` if symbol behavior is unclear.
+- Do not present unverified Godot API assumptions as facts.
+- In responses, mention verified symbols and key constraints.
