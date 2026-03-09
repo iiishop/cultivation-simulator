@@ -8,16 +8,16 @@
 
 config_version=5
 
-[autoload]
-
-LLMConfig="*res://Scripts/llm_config.gd"
-
 [application]
 
 config/name="cultivation-simulator"
 run/main_scene="res://Scenes/map_view.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+LLMConfig="*res://Scripts/llm_config.gd"
 
 [physics]
 

@@ -1,4 +1,5 @@
 extends TileMapLayer
+class_name TerrainGenerator
 
 ## 地形生成器：带偏向与故事性的地图（大陆轮廓、圣山、干旱带、边陲感）
 ## 使用 TileMapLayer（Godot 4.x 推荐），替代已弃用的 TileMap

@@ -1,9 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c2vx8qm4njy1b"]
+[gd_scene load_steps=6 format=3 uid="uid://c2vx8qm4njy1b"]
 
 [ext_resource type="Script" uid="uid://0ufwlxt8wsb6" path="res://Scripts/terrain_generator.gd" id="1"]
 [ext_resource type="Script" uid="uid://cbpu4wxxmbitf" path="res://Scripts/map_camera.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://dpause_menu_001" path="res://Elements/PauseMenu.tscn" id="3"]
 [ext_resource type="Script" path="res://Scripts/sidebar.gd" id="4_script"]
+[ext_resource type="Script" path="res://Scripts/pause_controller.gd" id="5_pause"]
+[ext_resource type="Script" path="res://Scripts/tile_hover_info.gd" id="6_hover"]
 
 [node name="MapView" type="Node2D" unique_id=1204455326]
 
@@ -15,6 +17,12 @@ zoom = Vector2(0.5, 0.5)
 
 [node name="MapController" type="Node" parent="." unique_id=640548792]
 script = ExtResource("2")
+
+[node name="PauseController" type="Node" parent="." unique_id=18990001]
+script = ExtResource("5_pause")
+
+[node name="TileHoverInfo" type="Node" parent="." unique_id=18990002]
+script = ExtResource("6_hover")
 
 [node name="PauseMenu" type="CanvasLayer" parent="." instance=ExtResource("3")]
 
