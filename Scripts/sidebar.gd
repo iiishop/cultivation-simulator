@@ -4,6 +4,8 @@ extends PanelContainer
 
 @onready var _btn_add_character: Button = %BtnAddCharacter
 
+var _add_character_panel: PopupPanel
+
 const _PANEL_BG := Color(0.09, 0.08, 0.07, 0.92)
 const _PANEL_BORDER := Color(0.55, 0.42, 0.18, 0.9)
 const _BTN_BG := Color(0.14, 0.12, 0.10, 1.0)
@@ -52,5 +54,14 @@ func _make_style(bg: Color) -> StyleBoxFlat:
 
 
 func _on_add_character_pressed() -> void:
-	# 预留：打开新增角色流程
+	if _add_character_panel == null:
+		var AddCharacterPanelScene := preload("res://Elements/AddCharacterPanel.tscn") as PackedScene
+		_add_character_panel = AddCharacterPanelScene.instantiate() as PopupPanel
+		get_parent().add_child(_add_character_panel)
+		_add_character_panel.character_created.connect(_on_character_created)
+	_add_character_panel.open_for_new()
+
+
+func _on_character_created(_character: Resource) -> void:
+	# 预留：将角色加入列表或存档
 	pass

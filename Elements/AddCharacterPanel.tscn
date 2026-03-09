@@ -1,0 +1,304 @@
+[gd_scene load_steps=2 format=3 uid="uid://add_character_panel_001"]
+
+[ext_resource type="Script" path="res://Scripts/add_character_panel.gd" id="1_script"]
+
+[node name="AddCharacterPanel" type="PopupPanel"]
+process_mode = 3
+script = ExtResource("1_script")
+size = Vector2i(720, 400)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="MarginContainer/ScrollContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "新增角色"
+horizontal_alignment = 1
+
+[node name="MainHBox" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 32
+size_flags_horizontal = 3
+
+[node name="LeftCol" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="BasicSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SectionLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection"]
+layout_mode = 2
+text = "基本信息"
+
+[node name="BasicRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="GenderLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(36, 0)
+size_flags_vertical = 1
+text = "性别"
+
+[node name="Gender" type="OptionButton" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+item_count = 2
+selected = 0
+size_flags_vertical = 1
+custom_minimum_size = Vector2(64, 0)
+text = "男"
+
+[node name="SurnameLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+size_flags_vertical = 1
+text = "姓"
+
+[node name="Surname" type="LineEdit" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+placeholder_text = ""
+
+[node name="GivenNameLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(24, 0)
+size_flags_vertical = 1
+text = "名"
+
+[node name="GivenName" type="LineEdit" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/BasicSection/BasicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+placeholder_text = ""
+
+[node name="StatsSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SectionLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection"]
+layout_mode = 2
+text = "基础属性"
+
+[node name="Grid" type="GridContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection"]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="LifespanCurrLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "当前寿命"
+
+[node name="LifespanCurrent" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 9999.0
+value = 60.0
+
+[node name="LifespanMaxLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "寿命上限"
+
+[node name="LifespanMax" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 9999.0
+value = 100.0
+
+[node name="StaminaLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "体力（生命上限）"
+
+[node name="StaminaMax" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 99999.0
+value = 100.0
+
+[node name="SpiritLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "灵力上限"
+
+[node name="SpiritMax" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99999.0
+value = 100.0
+
+[node name="LuckLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "幸运值"
+
+[node name="Luck" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 999.0
+value = 50.0
+
+[node name="ComprehensionLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+layout_mode = 2
+custom_minimum_size = Vector2(72, 0)
+text = "悟性"
+
+[node name="Comprehension" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/LeftCol/StatsSection/Grid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 999.0
+value = 50.0
+
+[node name="RightCol" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="RootsSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SectionLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection"]
+layout_mode = 2
+text = "灵根等级"
+
+[node name="RootsGrid" type="GridContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 6
+
+[node name="WaterLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "水"
+
+[node name="RootWater" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="FireLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "火"
+
+[node name="RootFire" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="WindLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "风"
+
+[node name="RootWind" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="ThunderLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "雷"
+
+[node name="RootThunder" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="EarthLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "土"
+
+[node name="RootEarth" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="WoodLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+layout_mode = 2
+text = "木"
+
+[node name="RootWood" type="SpinBox" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/RootsSection/RootsGrid"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.0
+max_value = 99.0
+value = 0.0
+
+[node name="FortuneSection" type="VBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SectionLabel" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/FortuneSection"]
+layout_mode = 2
+text = "气运"
+
+[node name="FortuneSlot" type="Label" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/FortuneSection"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "（气运槽位，待开发）"
+
+[node name="ButtonsRow" type="HBoxContainer" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Spacer" type="Control" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/ButtonsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BtnCancel" type="Button" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/ButtonsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(88, 0)
+text = "取消"
+
+[node name="BtnConfirm" type="Button" parent="MarginContainer/ScrollContainer/VBox/MainHBox/RightCol/ButtonsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(88, 0)
+text = "确定"
