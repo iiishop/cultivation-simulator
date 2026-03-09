@@ -156,8 +156,8 @@ func _create_placeholder_tileset() -> TileSet:
 		Color(0.2, 0.35, 0.7),   # 海洋
 		Color(0.34, 0.66, 0.24), # 草原
 		Color(0.9, 0.75, 0.3),   # 沙漠
-		Color(0.32, 0.62, 0.23), # 温带森林（接近草原，森林主要靠对象层表现）
-		Color(0.30, 0.60, 0.22), # 热带森林（接近草原，森林主要靠对象层表现）
+		Color(0.34, 0.66, 0.24), # 温带森林（与草原同底色，森林主要靠对象层表现）
+		Color(0.34, 0.66, 0.24), # 热带森林（与草原同底色，森林主要靠对象层表现）
 		Color(0.95, 0.95, 1.0),  # 雪地
 	]
 	var n := colors.size()
@@ -373,6 +373,14 @@ func get_height_meters_at_cell(coords: Vector2i) -> float:
 		return 0.0
 	var raw := _last_height_grid[_cell_idx(coords.x, coords.y, _last_half)]
 	return (raw - SEA_LEVEL_RAW) * METERS_PER_RAW_UNIT
+
+
+func get_height_raw_at_cell(coords: Vector2i) -> float:
+	if _last_height_grid.is_empty():
+		return get_heightv(Vector2(coords))
+	if coords.x < -_last_half or coords.x >= _last_half or coords.y < -_last_half or coords.y >= _last_half:
+		return SEA_LEVEL_RAW
+	return _last_height_grid[_cell_idx(coords.x, coords.y, _last_half)]
 
 
 func _cell_idx(x: int, y: int, half: int) -> int:
@@ -794,6 +802,10 @@ func get_last_generation_report() -> Dictionary:
 
 func get_map_half_extent() -> int:
 	return _last_half
+
+
+func get_map_size() -> int:
+	return _size
 
 
 func is_water_cell(coords: Vector2i) -> bool:

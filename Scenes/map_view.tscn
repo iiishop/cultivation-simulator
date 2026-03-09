@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://c2vx8qm4njy1b"]
+[gd_scene load_steps=8 format=3 uid="uid://c2vx8qm4njy1b"]
 
 [ext_resource type="Script" uid="uid://0ufwlxt8wsb6" path="res://Scripts/terrain_generator.gd" id="1"]
 [ext_resource type="Script" uid="uid://cbpu4wxxmbitf" path="res://Scripts/map_camera.gd" id="2"]
@@ -7,11 +7,15 @@
 [ext_resource type="Script" path="res://Scripts/pause_controller.gd" id="5_pause"]
 [ext_resource type="Script" path="res://Scripts/tile_hover_info.gd" id="6_hover"]
 [ext_resource type="Script" path="res://Scripts/forest_object_layer.gd" id="7_forest"]
+[ext_resource type="Script" path="res://Scripts/terrain_shading_overlay.gd" id="8_shading"]
 
 [node name="MapView" type="Node2D" unique_id=1204455326]
 
 [node name="TerrainMap" type="TileMapLayer" parent="." unique_id=256818500]
 script = ExtResource("1")
+
+[node name="TerrainShading" type="Node2D" parent="." unique_id=256818499]
+script = ExtResource("8_shading")
 
 [node name="ForestObjects" type="Node2D" parent="." unique_id=256818501]
 script = ExtResource("7_forest")
