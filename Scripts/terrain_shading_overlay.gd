@@ -3,16 +3,17 @@ extends Node2D
 ## 按地形与海拔生成一张低分辨率颜色贴图，再拉伸覆盖到地图上，增强高低起伏感。
 
 @export var terrain_generator: TerrainGenerator
-@export_range(0.0, 1.0, 0.01) var land_shade_strength := 0.42
-@export_range(0.0, 1.0, 0.01) var ocean_shade_strength := 0.45
-@export_range(0.0, 1.0, 0.01) var mountain_shade_strength := 0.32
-@export_range(0.0, 1.0, 0.01) var desert_shade_strength := 0.42
-@export_range(0.0, 1.0, 0.01) var snow_shade_strength := 0.58
-@export_range(0.0, 4.0, 0.05) var hillshade_strength := 1.65
-@export_range(0.0, 1.0, 0.01) var hillshade_shadow_strength := 0.34
-@export_range(0.0, 1.0, 0.01) var hillshade_highlight_strength := 0.18
-@export_range(0.0, 4.0, 0.05) var snow_hillshade_boost := 2.2
-@export_range(0.0, 1.0, 0.01) var snow_ridge_strength := 0.22
+@export_range(0.0, 1.0, 0.01) var land_shade_strength := 0.52
+@export_range(0.0, 1.0, 0.01) var ocean_shade_strength := 0.52
+@export_range(0.0, 1.0, 0.01) var mountain_shade_strength := 0.42
+@export_range(0.0, 1.0, 0.01) var desert_shade_strength := 0.50
+@export_range(0.0, 1.0, 0.01) var snow_shade_strength := 0.70
+@export_range(0.0, 4.0, 0.05) var hillshade_strength := 2.25
+@export_range(0.0, 1.0, 0.01) var hillshade_shadow_strength := 0.52
+@export_range(0.0, 1.0, 0.01) var hillshade_highlight_strength := 0.24
+@export_range(0.0, 4.0, 0.05) var snow_hillshade_boost := 2.9
+@export_range(0.0, 1.0, 0.01) var snow_ridge_strength := 0.38
+@export_range(0.5, 2.5, 0.01) var overlay_alpha_boost := 1.25
 
 var _texture: ImageTexture
 var _draw_rect := Rect2()
@@ -100,7 +101,7 @@ func _snow_ridge_tint(cell: Vector2i) -> float:
 func _apply_hillshade(base: Color, hill: float, terrain_id: int) -> Color:
 	var lit := hill - 0.5
 	if lit > 0.0:
-		var highlight_t := lit * 2.0 * hillshade_highlight_strength
+		var highlight_t := pow(lit * 2.0, 1.12) * hillshade_highlight_strength
 		var highlight_color := Color(1.0, 1.0, 0.96, base.a)
 		if terrain_id == TerrainGenerator.Terrain.DESERT:
 			highlight_color = Color(1.0, 0.92, 0.66, base.a)
@@ -108,12 +109,12 @@ func _apply_hillshade(base: Color, hill: float, terrain_id: int) -> Color:
 			highlight_color = Color(1.0, 1.0, 1.0, base.a)
 		return base.lerp(highlight_color, clampf(highlight_t, 0.0, 1.0))
 
-	var shadow_t := (0.5 - hill) * 2.0 * hillshade_shadow_strength
+	var shadow_t := pow((0.5 - hill) * 2.0, 1.10) * hillshade_shadow_strength
 	var shadow_color := Color(0.02, 0.05, 0.10, min(0.82, base.a + 0.08))
 	if terrain_id == TerrainGenerator.Terrain.DESERT:
 		shadow_color = Color(0.24, 0.15, 0.04, min(0.86, base.a + 0.12))
 	if terrain_id == TerrainGenerator.Terrain.SNOW:
-		shadow_color = Color(0.34, 0.42, 0.56, min(0.90, base.a + 0.16))
+		shadow_color = Color(0.28, 0.37, 0.52, min(0.93, base.a + 0.18))
 	return base.lerp(shadow_color, clampf(shadow_t, 0.0, 1.0))
 
 
@@ -143,6 +144,10 @@ func _color_for_cell(cell: Vector2i, terrain_id: int, raw_h: float) -> Color:
 	if terrain_id == TerrainGenerator.Terrain.SNOW:
 		var ridge_t := _snow_ridge_tint(cell) * snow_ridge_strength
 		shaded = shaded.lerp(Color(1.0, 1.0, 1.0, shaded.a), ridge_t)
+		var cold_shadow := clampf((0.58 - hill) * 1.45, 0.0, 1.0)
+		shaded = shaded.lerp(Color(0.26, 0.34, 0.48, min(0.94, shaded.a + 0.16)), cold_shadow * 0.36)
+
+	shaded.a = clampf(shaded.a * overlay_alpha_boost, 0.0, 0.95)
 	return shaded
 
 

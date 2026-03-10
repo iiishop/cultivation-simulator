@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2vx8qm4njy1b"]
+[gd_scene load_steps=9 format=3 uid="uid://c2vx8qm4njy1b"]
 
 [ext_resource type="Script" uid="uid://0ufwlxt8wsb6" path="res://Scripts/terrain_generator.gd" id="1"]
 [ext_resource type="Script" uid="uid://cbpu4wxxmbitf" path="res://Scripts/map_camera.gd" id="2"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://Scripts/tile_hover_info.gd" id="6_hover"]
 [ext_resource type="Script" path="res://Scripts/forest_object_layer.gd" id="7_forest"]
 [ext_resource type="Script" path="res://Scripts/terrain_shading_overlay.gd" id="8_shading"]
+[ext_resource type="Script" path="res://Scripts/generation_progress_ui.gd" id="9_progress"]
 
 [node name="MapView" type="Node2D" unique_id=1204455326]
 
@@ -31,6 +32,9 @@ script = ExtResource("5_pause")
 
 [node name="TileHoverInfo" type="Node" parent="." unique_id=18990002]
 script = ExtResource("6_hover")
+
+[node name="GenerationProgressUI" type="Node" parent="." unique_id=18990003]
+script = ExtResource("9_progress")
 
 [node name="PauseMenu" type="CanvasLayer" parent="." instance=ExtResource("3")]
 
@@ -76,3 +80,35 @@ text = "格子: -, -
 高度: -"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="GenerationProgress" type="ProgressBar" parent="UI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -54.0
+offset_right = 220.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 100.0
+show_percentage = false
+
+[node name="GenerationStatus" type="Label" parent="UI"]
+layout_mode = 1
+anchors_preset = 10
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -82.0
+offset_right = 220.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+text = "生成中..."

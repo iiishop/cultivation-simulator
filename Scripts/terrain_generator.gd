@@ -1,6 +1,8 @@
 extends TileMapLayer
 class_name TerrainGenerator
 
+signal generation_started(size: int)
+signal generation_progress(stage: String, progress: float)
 signal generation_completed(report: Dictionary)
 
 ## 地形生成器：带偏向与故事性的地图（大陆轮廓、圣山、干旱带、边陲感）
@@ -107,6 +109,15 @@ const RIDGE_STRENGTH := 0.26
 const RIDGE_FREQ := 1.0 / 44.0
 const CHAIN_FREQ := 1.0 / 95.0
 
+const LAND_GLOBAL_LIFT := 0.18
+const FALLOFF_STRENGTH := 0.62
+const FRONTIER_STRENGTH := 0.55
+const CONTINENT_STRENGTH := 0.32
+
+const SNOW_LINE_RAW := 0.52
+const SNOW_PEAK_RAW := 0.68
+const SNOW_RIDGE_MIN := 0.075
+
 const D4: Array[Vector2i] = [
 	Vector2i(-1, 0),
 	Vector2i(1, 0),
@@ -120,8 +131,8 @@ func _ready() -> void:
 	var seed_val := randi()
 	noise = FastNoiseLite.new()
 	noise.seed = seed_val
-	noise.frequency = 1.0 / 32.0
-	noise.fractal_octaves = 4
+	noise.frequency = 1.0 / 48.0
+	noise.fractal_octaves = 2
 	noise_continent = FastNoiseLite.new()
 	noise_continent.seed = seed_val + 1
 	noise_continent.frequency = 1.0 / 80.0
@@ -145,7 +156,11 @@ func _ready() -> void:
 	noise_chain.frequency = CHAIN_FREQ
 	noise_chain.fractal_octaves = 2
 	print("[Generator]: 地形生成器启动 (TileMapLayer, 故事性地图)")
-	generate(_size)
+	call_deferred("generate", _size)
+
+
+func _emit_progress(stage: String, progress: float) -> void:
+	generation_progress.emit(stage, clampf(progress, 0.0, 1.0))
 
 
 func _create_placeholder_tileset() -> TileSet:
@@ -350,12 +365,12 @@ func _desert_score(
 
 func get_heightv(pos: Vector2) -> float:
 	var base := noise.get_noise_2d(pos.x, pos.y)
-	var falloff := falloff_value(pos)
-	var continent := (_world_shape(pos) - 0.5) * 0.25
+	var falloff := falloff_value(pos) * FALLOFF_STRENGTH
+	var continent := (_world_shape(pos) - 0.5) * CONTINENT_STRENGTH
 	var peak := _story_peak(pos)
 	var ridge := _mountain_ridge(pos)
-	var frontier := _frontier_falloff(pos)
-	return base - falloff + continent + peak + ridge - frontier
+	var frontier := _frontier_falloff(pos) * FRONTIER_STRENGTH
+	return base - falloff + continent + peak + ridge - frontier + LAND_GLOBAL_LIFT
 
 
 ## 返回该位置高度（米），海平面 = 海岸线（raw -0.25）对应 0 m，陆地不再出现负海拔
@@ -619,6 +634,7 @@ func generate_land() -> void:
 	print("[Generator]: 开始生成陆地")
 	var total := _size * _size
 	var half := int(_size / 2.0)
+	_emit_progress("高度场", 0.05)
 
 	# 1) 预计算高度
 	var height_grid := PackedFloat32Array()
@@ -626,6 +642,8 @@ func generate_land() -> void:
 	for x in range(-half, half):
 		for y in range(-half, half):
 			height_grid[_cell_idx(x, y, half)] = get_heightv(Vector2(x, y))
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("海岸距离", 0.22)
 
 	# 2) 从海洋向外 BFS（双缓冲，避免 Array.pop_front 的 O(n) 代价）
 	var dist_grid := PackedInt32Array()
@@ -661,6 +679,8 @@ func generate_land() -> void:
 		frontier = next_frontier
 		next_frontier = t
 		d += 1
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("雨影", 0.38)
 
 	# 3) 雨影：风从西向东，背风侧变干（早退 + 步长 2 减采样）
 	var rain_shadow_grid := PackedFloat32Array()
@@ -693,6 +713,8 @@ func generate_land() -> void:
 			var distance_factor := 1.0 - clampf(float(nearest_step) / float(RAIN_SHADOW_RAY_STEPS), 0.0, 1.0)
 			var dry_mix := severity * (0.55 + 0.45 * distance_factor)
 			rain_shadow_grid[idx] = 1.0 - dry_mix * (1.0 - RAIN_SHADOW_FACTOR)
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("气候", 0.52)
 
 	# 4) 预计算温度与湿度网格，主循环只做查表与 set_cell（少重复噪声）
 	var temp_grid := PackedFloat32Array()
@@ -710,6 +732,8 @@ func generate_land() -> void:
 			temp_grid[idx] = _temperature_with_modifiers(pos, h, dist)
 			var coastal_humidity := 1.0 / (1.0 + float(dist) / COASTAL_DECAY_SCALE)
 			moisture_grid[idx] = _moisture_with_diffusion(coastal_humidity, rain_shadow_grid[idx], pos, h)
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("生物群系", 0.68)
 
 	# 5) 先生成地形候选（不直接写图），再做“连续沙漠块”覆盖
 	var terrain_grid := PackedInt32Array()
@@ -729,7 +753,8 @@ func generate_land() -> void:
 			if h <= -0.5:
 				terrain_grid[idx] = Terrain.DEEP_OCEAN
 				continue
-			if h >= 0.4:
+			var ridge_val := _mountain_ridge(Vector2(x, y))
+			if h >= SNOW_PEAK_RAW or (h >= SNOW_LINE_RAW and ridge_val >= SNOW_RIDGE_MIN):
 				terrain_grid[idx] = Terrain.SNOW
 				continue
 
@@ -751,11 +776,15 @@ func generate_land() -> void:
 				terrain_grid[idx] = base_biome
 
 			desert_score_grid[idx] = _desert_score(temperature, moisture, h, coastal_humidity, rain_shadow, pos)
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("沙漠连通", 0.80)
 
 	var desert_mask := _build_contiguous_desert_mask(height_grid, desert_score_grid, half)
 	for idx in range(total):
 		if desert_mask[idx] == 1:
 			terrain_grid[idx] = Terrain.DESERT
+	await get_tree().create_timer(0.0).timeout
+	_emit_progress("绘制地块", 0.82)
 
 	_last_height_grid = height_grid.duplicate()
 	_last_terrain_grid = terrain_grid.duplicate()
@@ -770,10 +799,14 @@ func generate_land() -> void:
 			i += 1
 			if i % 8192 == 0:
 				print("[Generator]: ", snappedf(float(i) / total * 100.0, 0.1), "%")
+				_emit_progress("绘制地块", 0.82 + 0.16 * float(i) / float(total))
+				await get_tree().create_timer(0.0).timeout
+				update_internals()
 
 	var report := _build_generation_report(terrain_grid, desert_mask, desert_score_grid, temp_grid, moisture_grid, half)
 	_print_generation_report(report)
 	_last_generation_report = report
+	_emit_progress("完成", 1.0)
 
 	print("[Generator]: 陆地生成完成")
 
@@ -817,6 +850,7 @@ func is_water_cell(coords: Vector2i) -> bool:
 
 func generate(size: int) -> void:
 	_size = size
+	generation_started.emit(size)
 	_last_seed = randi()
 	noise.seed = _last_seed
 	noise_continent.seed = _last_seed + 1
@@ -834,6 +868,6 @@ func generate(size: int) -> void:
 		1: _story_dry_center = Vector2(cx, -cy)
 		2: _story_dry_center = Vector2(-cx, cy)
 		_: _story_dry_center = Vector2(cx, cy)
-	generate_land()
+	await generate_land()
 	update_internals()
-	emit_signal("generation_completed", _last_generation_report)
+	generation_completed.emit(_last_generation_report)
